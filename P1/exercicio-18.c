@@ -12,8 +12,29 @@ entre as palavras das frases.
 #include <string.h>
 #include <stdlib.h>
 
+#define tam 20
+
+void lerfrases(char *frase1, char *frase2);
+
 int main(){
+    char frase1[tam], frase2[tam];
     
-    
+    lerfrases(frase1, frase2);
+
+    if(strcmp(frase1, frase2) == 0){
+        printf("As duas frases sao de tamanhos iguais. As duas frases possuem o mesmo conteudo.");
+    }else{
+        printf("As duas frases sao de tamanhos diferentes. As duas frases possuem conteudo distintos.");
+    }
+
     return 0;
+}
+
+void lerfrases(char *frase1, char *frase2){
+
+    printf("Entre com a primeira frase:\n");
+    scanf(" %[^\n]", frase1);
+
+    printf("Entre com a primeira frase:\n");
+    scanf(" %[^\n]", frase2);
 }
