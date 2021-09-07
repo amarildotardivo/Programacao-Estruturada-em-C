@@ -40,14 +40,18 @@ void preencheFrase(char *frase){
 }
 
 int verificaLetra(char *frase, char letra){
-    char *verifica;
+    char l;
+    int i, tamanhoFrase;
 
-    verifica = strchr(frase, letra);
-    
-    if(verifica != NULL){
-        return 1;
-    }else{
-        return 0;        
+    tamanhoFrase = strlen(frase);
+
+    for(i = 0; i < tamanhoFrase; i++){
+        l = frase[i];
+        if(l == letra){
+            return 1;
+        }
     }
+
+    return 0;   
     
 }
