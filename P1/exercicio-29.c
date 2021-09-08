@@ -22,7 +22,7 @@ int main(){
     lerVetor(v);
     resultado = maiorSomatorio(v, k);
 
-    printf("O maiorSomatorio numero da soma é: %d\n", resultado);
+    printf("O maiorSomatorio numero da soma e: %d\n", resultado);
     
     return 0;
 }
