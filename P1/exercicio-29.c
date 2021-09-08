@@ -8,7 +8,7 @@ Obs.: Não é permitido utilizar qualquer estrutura de dados auxiliar.
 */
 #include <stdio.h>
 
-#define n 6
+#define n 30
 
 void lerVetor(int *v);
 int maiorSomatorio(int *v, int k);
