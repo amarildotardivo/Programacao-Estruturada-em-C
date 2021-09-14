@@ -21,7 +21,7 @@ int main(){
     preencheM(matriz);
     resultado = minimax(matriz);
 
-    printf("O Minimax eh: %d", resultado);
+    printf("\nO Minimax eh: %d\n", resultado);
 
     return 0;
 }
@@ -48,8 +48,7 @@ int minimax(int matriz[][tam]){
             }
         }
     }
-    printf("\n\n    Max: %d, na linha %d\n\n", max, indiceMax);
-
+    
     for(j = 0; j < tam; j++){
         if(j == 0){
             min = matriz[indiceMax][j];
