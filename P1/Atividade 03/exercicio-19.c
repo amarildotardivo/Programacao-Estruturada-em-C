@@ -8,7 +8,7 @@ impressão da soma tem que ser na função main.
 #include <stdio.h>
 #include <time.h>
 
-#define tam 3
+#define tam 6
 
 void preencheM(int matriz[][tam]);
 int somaM(int matriz[][tam]);
@@ -34,23 +34,17 @@ void preencheM(int matriz[][tam]){
             matriz[i][j] = rand() % 30 + 1;
         }
     }
-    
-    printf("Matriz:\n");
-    for(i = 0; i < tam; i++){
-        for(j = 0; j < tam; j++){
-            printf("%d ", matriz[i][j]);
-        }
-        printf("\n");
-    }
 }
 int somaM(int matriz[][tam]){
     int i, j, soma = 0;
 
     for(i = 0; i < tam; i++){
         for(j = 0; j < tam; j++){
-            if( (i != j) || (i + j != tam + 1) ){
-                soma += matriz[i][j];
-            }
+            if(i != j){
+                if( i + j != tam - 1 ){
+                    soma += matriz[i][j];
+                }
+            } 
         }
     }
     return soma;
