@@ -47,6 +47,17 @@ int fatorial(int fat){
 
     return resultadoFatorial;
 }
+
+int fat(int num){
+    int i, fatorial = 1;
+
+    for(i = 2; i <= num; i++){
+        fatorial *= i;
+    }
+
+    return fatorial;
+}
+
 void preencheVetB(int *vetA, int *vetB){
     int i;
     printf("\nVetor B: ");
