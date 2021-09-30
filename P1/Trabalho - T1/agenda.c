@@ -9,8 +9,13 @@
 void inserir_contato();
 int remover_contato();
 
+void removeEspacos(char *nome);
+void buscaContato(char *caminho);
+void imprimeArquivo(char *caminho);
+
 int main(){
     int verificacao = 0, auxiliar = 0;
+	char *nome[20];
 
     do{
     	printf("         AGENDA");
@@ -60,10 +65,18 @@ int main(){
         break;
 
         case 3:
-
+			printf("-----IMPRIMINDO TODOS OS CONTATOS-----\n");
+            imprimeArquivo("Agenda.txt");
+            printf("\n-------------------------\n");
+			system("pause");
+			system("cls");
         break;
         case 4:
-
+			printf("-----PESQUISANDO UM CONTATO-----\n");
+			buscaContato("Agenda.txt");
+            printf("\n-------------------------\n");
+			system("pause");
+			system("cls");
         break;
 
         }
@@ -158,4 +171,52 @@ int remover_contato(){
     }else{
         return 2;
     }
+}
+
+void buscaContato(char *caminho) {
+	char nome[20];
+	printf("%s", "\nDigite um nome:\n");
+	scanf(nome, 20);
+	fflush(stdin);
+	removeEspacos(nome);
+
+	char contato[20], telefone[20];
+	int dia, mes;
+	
+	FILE *arquivo;
+	arquivo = fopen(caminho, "r");
+
+	while(fscanf(arquivo,"%s %s %d %d\n", contato, telefone, &dia, &mes) != EOF) {
+		if (strncasecmp(contato, nome, strlen(nome) - 1) == 0) {
+			printf("%s %s %d %d", contato, telefone, dia, mes);
+		}
+	}
+	fclose(arquivo);
+}
+
+void imprimeArquivo(char *caminho) {
+	FILE *arquivo;
+	char contato[20], telefone[20];
+	int dia, mes;
+				
+	arquivo = fopen(caminho, "r");
+	while(fscanf(arquivo,"%s %s %d %d\n", contato, telefone, &dia, &mes) != EOF) {
+		printf("%s %s %d %d", contato, telefone, dia, mes);
+	}
+	fclose(arquivo);
+}
+
+void removeEspacos(char *nome) {
+	int i;
+	int j = 0;
+	int tam = strlen(nome);
+	for (i = 0; i < tam; i++) {
+		while ((i + j) < tam - 1 && nome[i + j] == ' ') {
+			j++;
+		}
+		nome[i] = nome[i + j];
+		if (i+j > tam) {
+			nome[i] = '\0';
+		}
+	}
 }
