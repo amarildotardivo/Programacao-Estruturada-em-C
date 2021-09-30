@@ -176,7 +176,7 @@ int remover_contato(){
 void buscaContato(char *caminho) {
 	char nome[20];
 	printf("%s", "\nDigite um nome:\n");
-	scanf(nome, 20);
+	scanf("%s", nome);
 	fflush(stdin);
 	removeEspacos(nome);
 
@@ -188,7 +188,7 @@ void buscaContato(char *caminho) {
 
 	while(fscanf(arquivo,"%s %s %d %d\n", contato, telefone, &dia, &mes) != EOF) {
 		if (strncasecmp(contato, nome, strlen(nome) - 1) == 0) {
-			printf("%s %s %d %d", contato, telefone, dia, mes);
+			printf("%s %s %d %d\n", contato, telefone, dia, mes);
 		}
 	}
 	fclose(arquivo);
@@ -201,7 +201,7 @@ void imprimeArquivo(char *caminho) {
 				
 	arquivo = fopen(caminho, "r");
 	while(fscanf(arquivo,"%s %s %d %d\n", contato, telefone, &dia, &mes) != EOF) {
-		printf("%s %s %d %d", contato, telefone, dia, mes);
+		printf("%s %s %d %d\n", contato, telefone, dia, mes);
 	}
 	fclose(arquivo);
 }
