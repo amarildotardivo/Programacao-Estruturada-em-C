@@ -1,0 +1,2 @@
+Nota Max = 15.00 
+Nota Min = 6.00
