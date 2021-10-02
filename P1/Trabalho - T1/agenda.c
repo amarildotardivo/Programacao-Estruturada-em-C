@@ -13,6 +13,8 @@ void removeEspacos(char *nome);
 void buscaContato(char *caminho);
 void imprimeArquivo(char *caminho);
 
+int imprimiAniversariante();
+
 int main(){
     int verificacao = 0, auxiliar = 0;
 	char *nome[20];
@@ -71,12 +73,22 @@ int main(){
 			system("pause");
 			system("cls");
         break;
+
         case 4:
 			printf("-----PESQUISANDO UM CONTATO-----\n");
 			buscaContato("Agenda.txt");
             printf("\n-------------------------\n");
 			system("pause");
 			system("cls");
+        break;
+
+        case 5:
+            printf("-----ANIVERSARIANTE(S) DO MÊS-----\n");
+            auxiliar = imprimiAniversariante();
+            if(auxiliar == 1){
+                printf("\nAgenda ainda não existe, adicione um contato para poder buscar os aniversariantes!\n\n");
+            }
+            printf("\n-------------------------\n");
         break;
 
         }
@@ -219,4 +231,35 @@ void removeEspacos(char *nome) {
 			nome[i] = '\0';
 		}
 	}
+}
+
+int imprimiAniversariante(){
+    FILE *arqEntrada;
+    int dia, mes, mesDigitado, mesEncontrado = 0;
+    char nome[20], telefone[20];
+    
+    arqEntrada = fopen("Agenda.txt", "r");
+    if(arqEntrada == NULL){
+        return 1;
+    }
+
+    printf("Digite o mês: ");
+    scanf("%d", mesDigitado);
+
+    while(!feof(arqEntrada)){
+        
+        fscanf(arqEntrada, "%s %s %d %d", nome, telefone, &dia, &mes);
+
+        if(mes == mesDigitado ){
+            printf("%s %s %d %d\n", nome, telefone, dia, mes);
+            mesEncontrado++;
+        }
+    }
+
+    if(mesEncontrado > 0){
+        printf("\n  Não há nenhum contato que faz aniversario no mes %d!\n", mesDigitado);
+    }
+
+    return 0;
+
 }
