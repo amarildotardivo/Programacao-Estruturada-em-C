@@ -1,0 +1,4 @@
+Cidade: SaoJoaodaBarra Listros: 2.67L Valor: R$18.67
+Cidade: Vitoria Listros: 14.47L Valor: R$101.27
+Cidade: RiodeJaneiro Listros: 24.80L Valor: R$173.60
+Cidade: Guarapari Listros: 11.53L Valor: R$80.73

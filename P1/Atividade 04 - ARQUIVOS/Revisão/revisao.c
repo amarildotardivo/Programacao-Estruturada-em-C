@@ -53,10 +53,6 @@ int maxMin(FILE *arqEntrada){
     }
 
     arqSaida = fopen("Resultado.txt", "w");
-    if(arqSaida == NULL){
-        printf("\nErro na abertura do arquivo!\n\n");
-        return 1;
-    }
     
     fprintf(arqSaida, "Nota Max = %.2f \nNota Min = %.2f\n", max, min);
 
@@ -78,10 +74,6 @@ int quantAprovados(FILE *arqEntrada){
     }
 
     arqSaida = fopen("Aprovados.txt", "w");
-    if(arqSaida == NULL){
-        printf("\nErro na abertura do arquivo!\n\n");
-        return 1;
-    }
 
     fprintf(arqSaida, "Aprovados: %d", cont);
     
@@ -107,10 +99,6 @@ int mediaReprovados(FILE *arqEntrada){
     media = soma/cont;
 
     arqSaida = fopen("Reprovados.txt", "w");
-    if(arqSaida == NULL){
-        printf("\nErro na abertura do arquivo!\n\n");
-        return 1;
-    }
     
     fprintf(arqSaida, "Media dos reprovados: %.2f", media);
 
