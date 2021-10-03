@@ -16,7 +16,6 @@ int verificaArquivoVazio(FILE *arquivo);
 
 int main(){
     int verificacao = 0, auxiliar = 0, verificarAgenda;
-	char *nome[20];
 
     do{
     	printf("         AGENDA");
@@ -45,15 +44,15 @@ int main(){
             auxiliar = remover_contato();
             
             if(auxiliar == 0){
-                printf("\n  Contato removido\n");
+                printf("\n      Contato removido\n");
             }else{
                 if(auxiliar == 1){
-                    printf("\n  Agenda Vazia\n");
+                    printf("\n      Agenda nao existe! Insira ao menos 1 contato para remove-lo!\n");
                 }else{
                     if(auxiliar == 2){
-                        printf("\n  Contato nao encontrado\n");
+                        printf("\n      Contato nao encontrado\n");
                     }else{
-                        printf("\n  Agenda Vazia! Adicione ao menos 1 contato para poder exclui-lo!\n\n");
+                        printf("\n      Contato removido!\n\n     Agenda foi excluida, pois estava vazia!\n");
                     }
                 }
             }
@@ -79,7 +78,7 @@ int main(){
             if(verificarAgenda == 1){
                 printf("\n  Agenda ainda nao existe, adicione um contato para poder pesquisa-los!\n\n");
             }else if(verificarAgenda == 2){
-                printf("\n  Agenda Vazia! Adicione ao menos 1 contato para poder pesquisa-los!\n\n");
+                printf("\n  Contato nao encontrado!\n\n");
             }
             printf("\n-------------------------\n");
 
@@ -112,7 +111,8 @@ void inserir_contato(){
 	
 	
     printf("Digite o seu nome: \n");
-    scanf(" %s", nome);//colocado um espaço entre as aspas e o % para limpar buffer do teclado
+    scanf(" %[^\n]s", nome);//colocado um espaço entre as aspas e o % para limpar buffer do teclado
+    removeEspacos(nome);
 	
     printf("Digite o telefone: \n");
     scanf(" %s", telefone);
@@ -136,21 +136,15 @@ void inserir_contato(){
     fclose(arqAgenda);
 
 }
+
 int remover_contato(){
     char nome[20], telefone[20],contato[20],nome_minusculo[20];
-    int i,dia, mes,auxiliar,quantidade_removida=0, verificaArquivo;
+    int i,dia, mes,auxiliar,quantidade_removida=0;
 
     FILE *arqAgenda=fopen("Agenda.txt", "r");
 
     if(arqAgenda == NULL)
         return 1;
-
-    //retorna 1 pra vazio e 0 para cheio
-    verificaArquivo = verificaArquivoVazio(arqAgenda);
-    if(verificaArquivo == 1){
-        return 3;//retorna 3 para arquivo vazio
-    }
-    rewind(arqAgenda);//seta o cursor para o inicio do arquivo ao acabar a verificação
 
     printf("Insira o nome do contato a ser removido: \n");
     scanf(" %s", contato);
@@ -183,23 +177,36 @@ int remover_contato(){
             fprintf(arqAgenda2,"%s %s %d %d\n", nome,telefone,dia,mes);
         }
     }
-           
-    fclose(arqAgenda);
+   
+   
+   	fclose(arqAgenda); 
     fclose(arqAgenda2);
 
     remove("Agenda.txt");
     rename("Agenda2.txt","Agenda.txt");
+
+    arqAgenda=fopen("Agenda.txt", "r");
+    
+    //retorna 1 pra vazio e 0 para cheio
+    if(verificaArquivoVazio(arqAgenda) == 0){
+      fclose(arqAgenda);
+   }else{
+       return 3;
+   }
+
+    
 
     if(quantidade_removida != 0){
         return 0;
     }else{
         return 2;
     }
+
 }
 
 int buscaContato(char *caminho) {
 	char nome[20], contato[20], telefone[20];
-    int dia, mes, verificaArquivo;
+    int dia, mes, encontrouContato = 0;
 	FILE *arquivo;
 
 	arquivo = fopen(caminho, "r");
@@ -207,45 +214,37 @@ int buscaContato(char *caminho) {
         return 1;
     }
 
-    //retorna 1 pra vazio e 0 para cheio
-    verificaArquivo = verificaArquivoVazio(arquivo);
-    if(verificaArquivo == 1){
-        return 2;//retorna 2 para arquivo vazio
-    }
-    rewind(arquivo);//seta o cursor para o inicio do arquivo ao acabar a verificação
-
 	printf("\nDigite um nome:\n");
 	scanf(" %s", nome);
-
-	removeEspacos(nome);
 	
     while(fscanf(arquivo,"%s %s %d %d\n", contato, telefone, &dia, &mes) != EOF) {
 		if (strncasecmp(contato, nome, strlen(nome) - 1) == 0) {
 			printf("%s %s %d %d\n", contato, telefone, dia, mes);
+            encontrouContato++;
 		}
 	}
 
     rewind(arquivo);
 	fclose(arquivo);
+
+    //retora 2 - se não encotrar nenhum contato com o nome digitado
+    if(encontrouContato > 0){
+        return 0;
+    }else{
+        return 2;        
+    }
 }
 
 
 int imprimeArquivo(char *caminho) {
 	FILE *arquivo;
 	char contato[20], telefone[20];
-	int dia, mes, verificaArquivo;
+	int dia, mes;
 				
 	arquivo = fopen(caminho, "r");
     if(arquivo == NULL){
         return 1;
     }
-
-    //retorna 1 pra vazio e 0 para cheio
-    verificaArquivo = verificaArquivoVazio(arquivo);
-    if(verificaArquivo == 1){
-        return 2;//retorna 2 para arquivo vazio
-    }
-    rewind(arquivo);//seta o cursor para o inicio do arquivo ao acabar a verificação
 
 	while(fscanf(arquivo,"%s %s %d %d\n", contato, telefone, &dia, &mes) != EOF) {
 		printf("%s %s %d %d\n", contato, telefone, dia, mes);
@@ -253,6 +252,8 @@ int imprimeArquivo(char *caminho) {
 
     rewind(arquivo);
 	fclose(arquivo);
+
+    return 0;
 }
 
 void removeEspacos(char *nome) {
@@ -272,21 +273,14 @@ void removeEspacos(char *nome) {
 
 int imprimeAniversariante(){
     FILE *arqEntrada;
-    int dia, mes, mesDigitado, mesEncontrado = 0, verificaArquivo, cont = 0;
-    char nome[20], telefone[20], estaPreenchido[20];
+    int dia, mes, mesDigitado, mesEncontrado = 0;
+    char nome[20], telefone[20];
     
     
     arqEntrada = fopen("Agenda.txt", "r");
     if(arqEntrada == NULL){
         return 1;//retorna 1 para arquivo não existe
     }
-    
-    //retorna 1 pra vazio e 0 para cheio
-    verificaArquivo = verificaArquivoVazio(arqEntrada);
-    if(verificaArquivo == 1){
-        return 2;//retorna 2 para arquivo vazio
-    }
-    rewind(arqEntrada);//seta o cursor para o inicio do arquivo ao acabar a verificação
 
     printf("Digite o mes: ");
     scanf("%d", &mesDigitado);
@@ -312,17 +306,14 @@ int imprimeAniversariante(){
 //retorna 0 - se arquivo cheio
 //retorna 1 - se arquivo vazio
 int verificaArquivoVazio(FILE *arquivo){
-    int dia, mes, cont = 0;
+    int dia, mes;
     char nome[20], telefone[20];
 
-    while (fscanf(arquivo, "%s %s %d %d", nome, telefone, &dia, &mes) != EOF)
-    {
-        cont++;
-    }
-
-    if(cont > 0){
+    while (fscanf(arquivo, "%s %s %d %d", nome, telefone, &dia, &mes) != EOF){
         return 0;
     }
 
+    fclose(arquivo);
+    remove("Agenda.txt");
     return 1;
 }
