@@ -83,7 +83,7 @@ int main(){
         break;
 
         case 5:
-            printf("-----ANIVERSARIANTE(S) DO MÊS-----\n");
+            printf("-----ANIVERSARIANTE(S) DO MES-----\n");
             auxiliar = imprimiAniversariante();
             if(auxiliar == 1){
                 printf("\nAgenda ainda não existe, adicione um contato para poder buscar os aniversariantes!\n\n");
@@ -243,12 +243,10 @@ int imprimiAniversariante(){
         return 1;
     }
 
-    printf("Digite o mês: ");
-    scanf("%d", mesDigitado);
+    printf("Digite o mas: ");
+    scanf("%d", &mesDigitado);
 
-    while(!feof(arqEntrada)){
-        
-        fscanf(arqEntrada, "%s %s %d %d", nome, telefone, &dia, &mes);
+    while(fscanf(arqEntrada, "%s %s %d %d", nome, telefone, &dia, &mes) != EOF){
 
         if(mes == mesDigitado ){
             printf("%s %s %d %d\n", nome, telefone, dia, mes);
@@ -257,7 +255,7 @@ int imprimiAniversariante(){
     }
 
     if(mesEncontrado > 0){
-        printf("\n  Não há nenhum contato que faz aniversario no mes %d!\n", mesDigitado);
+        printf("\n  Nao ha nenhum contato que faz aniversario no mes %d!\n", mesDigitado);
     }
 
     return 0;
