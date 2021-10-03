@@ -215,11 +215,12 @@ int buscaContato(char *caminho) {
     }
 
 	printf("\nDigite um nome:\n");
-	scanf(" %s", nome);
+	scanf(" %[^\n]s", nome);
+    removeEspacos(nome);
 	
     while(fscanf(arquivo,"%s %s %d %d\n", contato, telefone, &dia, &mes) != EOF) {
 		if (strncasecmp(contato, nome, strlen(nome) - 1) == 0) {
-			printf("%s %s %d %d\n", contato, telefone, dia, mes);
+			printf("\n      %s %s %d %d\n", contato, telefone, dia, mes);
             encontrouContato++;
 		}
 	}
