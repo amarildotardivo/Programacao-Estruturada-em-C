@@ -1,3 +1,11 @@
+/*
+2) Faça um algoritmo para ler (pelo teclado) um vetor com 15 elementos inteiros e depois inverter este mesmo
+vetor, sem utilizar um vetor auxiliar. Crie e utilize três procedimentos: um para preencher o vetor, outro
+para invertê-lo e o terceiro para imprimi-lo após a inversão.
+Obs.: O objetivo deste exercício não é imprimir o vetor em ordem inversa, mas sim colocar os elementos
+dentro do vetor em ordem inversa.
+*/
+
 #include <stdio.h>
 
 #define tam 15
