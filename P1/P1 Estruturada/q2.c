@@ -32,10 +32,10 @@ void imprimi(int *vet){
 
     arqSaida = fopen("Resultado.txt", "w");
 
-    for(i = 0; i <= tam; i++){
+    for(i = 0; i < tam; i++){
         cont = 0;
         if(vet[i] != 0){
-            for(j = 0; j <= tam; j++){
+            for(j = 0; j < tam; j++){
                 if( vet[i] == vet[j]){
                     cont++;
                 }
