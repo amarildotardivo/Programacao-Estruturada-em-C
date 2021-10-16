@@ -1,20 +1,25 @@
+//Amarildo, Elias, Leonardo - Trabalho 1) Agenda
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<ctype.h>
 
-void inserir_contato();
-int remover_contato();
+#define tamanho 100
 
+void inserir_contato(char *nome, char *telefone, FILE  *arqAgenda);
+int remover_contato(char *nome, char *telefone, char *contato, char *nome_minusculo, FILE *arqAgenda);
+
+int buscaContato(char *nome, char *contato, char *telefone, char *caminho, FILE *arqAgenda);
 void removeEspacos(char *nome);
-int buscaContato(char *caminho);
-int imprimeArquivo(char *caminho);
+int imprimeArquivo(char *contato, char *telefone, char *caminho, FILE *arquivo);
 
-int imprimeAniversariante();
+int imprimeAniversariante(char *nome, char *telefone, FILE *arqAgenda);
 
-int verificaArquivoVazio(FILE *arquivo);
+int verificaArquivoVazio(char *nome, char *telefone, FILE *arqAgenda);
 
 int main(){
+    char nome[tamanho], telefone[tamanho], contato[tamanho], nome_minusculo[tamanho]; 
+    FILE  *arqAgenda;
     int verificacao = 0, auxiliar = 0, verificarAgenda;
 
     do{
@@ -33,7 +38,7 @@ int main(){
         {
         case 1:
         	printf("-----INSERINDO CONTATO-----\n");
-            inserir_contato();
+            inserir_contato(nome, telefone, arqAgenda);
             printf("Contato inserido!");
             printf("\n-------------------------\n");
             
@@ -41,7 +46,7 @@ int main(){
 
         case 2:
         	printf("-----EXCLUINDO CONTATO-----\n");
-            auxiliar = remover_contato();
+            auxiliar = remover_contato(nome, telefone, contato, nome_minusculo, arqAgenda);
             
             if(auxiliar == 0){
                 printf("\n      Contato removido\n");
@@ -62,7 +67,7 @@ int main(){
 
         case 3:
 			printf("-----IMPRIMINDO TODOS OS CONTATOS-----\n");
-            verificarAgenda = imprimeArquivo("Agenda.txt");
+            verificarAgenda = imprimeArquivo(contato, telefone, "Agenda.txt", arqAgenda);
             if(verificarAgenda == 1){
                 printf("\n  Agenda ainda nao existe, adicione um contato para poder lista-los!\n\n");
             }else if(verificarAgenda == 2){
@@ -74,7 +79,7 @@ int main(){
 
         case 4:
 			printf("-----PESQUISANDO UM CONTATO-----\n");
-			verificarAgenda = buscaContato("Agenda.txt");
+			verificarAgenda = buscaContato(nome, contato, telefone, "Agenda.txt", arqAgenda);
             if(verificarAgenda == 1){
                 printf("\n  Agenda ainda nao existe, adicione um contato para poder pesquisa-los!\n\n");
             }else if(verificarAgenda == 2){
@@ -86,7 +91,7 @@ int main(){
 
         case 5:
             printf("-----PESQUISANDO ANIVERSARIANTE(S) DO MES-----\n");
-            verificarAgenda = imprimeAniversariante();
+            verificarAgenda = imprimeAniversariante(nome, telefone, arqAgenda);
             if(verificarAgenda == 1){
                 printf("\n  Agenda ainda nao existe, adicione um contato para poder buscar os aniversariantes!\n\n");
             }else if(verificarAgenda == 2){
@@ -103,11 +108,10 @@ int main(){
     return 0;
 }
 
-void inserir_contato(){
-    char nome[20], telefone[20];
+void inserir_contato(char *nome, char *telefone, FILE  *arqAgenda){
     int dia, mes;
 
-    FILE  *arqAgenda = fopen("Agenda.txt", "a");
+    arqAgenda = fopen("Agenda.txt", "a");
 	
 	
     printf("Digite o seu nome: \n");
@@ -137,18 +141,17 @@ void inserir_contato(){
 
 }
 
-int remover_contato(){
-    char nome[20], telefone[20],contato[20],nome_minusculo[20];
+int remover_contato(char *nome, char *telefone, char *contato, char *nome_minusculo, FILE *arqAgenda){
     int i,dia, mes,auxiliar,quantidade_removida=0;
 
-    FILE *arqAgenda=fopen("Agenda.txt", "r");
+    arqAgenda=fopen("Agenda.txt", "r");
 
     if(arqAgenda == NULL)
         return 1;
 
     printf("Insira o nome do contato a ser removido: \n");
     scanf(" %s", contato);
-    
+
     auxiliar = strlen(contato);
     
     for(i = 0; i < auxiliar; i++){
@@ -185,10 +188,14 @@ int remover_contato(){
     remove("Agenda.txt");
     rename("Agenda2.txt","Agenda.txt");
 
-    arqAgenda=fopen("Agenda.txt", "r");
+    arqAgenda = fopen("Agenda.txt", "r");
+    if(arqAgenda == NULL){
+        printf("\n      Erro ao abrir o arquivo!\n\n");
+        return 1;//retorna 1 para arquivo não existe
+    }
     
     //retorna 1 pra vazio e 0 para cheio
-    if(verificaArquivoVazio(arqAgenda) == 0){
+    if(verificaArquivoVazio(nome, telefone, arqAgenda) == 0){
       fclose(arqAgenda);
    }else{
        return 3;
@@ -204,13 +211,11 @@ int remover_contato(){
 
 }
 
-int buscaContato(char *caminho) {
-	char nome[20], contato[20], telefone[20];
+int buscaContato(char *nome, char *contato, char *telefone, char *caminho, FILE *arqAgenda) {
     int dia, mes, encontrouContato = 0;
-	FILE *arquivo;
 
-	arquivo = fopen(caminho, "r");
-    if(arquivo == NULL){
+	arqAgenda = fopen(caminho, "r");
+    if(arqAgenda == NULL){
         return 1;
     }
 
@@ -218,15 +223,15 @@ int buscaContato(char *caminho) {
 	scanf(" %[^\n]s", nome);
     removeEspacos(nome);
 	
-    while(fscanf(arquivo,"%s %s %d %d\n", contato, telefone, &dia, &mes) != EOF) {
+    while(fscanf(arqAgenda,"%s %s %d %d\n", contato, telefone, &dia, &mes) != EOF) {
 		if (strncasecmp(contato, nome, strlen(nome) - 1) == 0) {
 			printf("\n      %s %s %d %d\n", contato, telefone, dia, mes);
             encontrouContato++;
 		}
 	}
 
-    rewind(arquivo);
-	fclose(arquivo);
+    rewind(arqAgenda);
+	fclose(arqAgenda);
 
     //retora 2 - se não encotrar nenhum contato com o nome digitado
     if(encontrouContato > 0){
@@ -237,22 +242,20 @@ int buscaContato(char *caminho) {
 }
 
 
-int imprimeArquivo(char *caminho) {
-	FILE *arquivo;
-	char contato[20], telefone[20];
+int imprimeArquivo(char *contato, char *telefone, char *caminho, FILE *arqAgenda) {
 	int dia, mes;
 				
-	arquivo = fopen(caminho, "r");
-    if(arquivo == NULL){
+	arqAgenda = fopen(caminho, "r");
+    if(arqAgenda == NULL){
         return 1;
     }
 
-	while(fscanf(arquivo,"%s %s %d %d\n", contato, telefone, &dia, &mes) != EOF) {
+	while(fscanf(arqAgenda,"%s %s %d %d\n", contato, telefone, &dia, &mes) != EOF) {
 		printf("%s %s %d %d\n", contato, telefone, dia, mes);
 	}
 
-    rewind(arquivo);
-	fclose(arquivo);
+    rewind(arqAgenda);
+	fclose(arqAgenda);
 
     return 0;
 }
@@ -272,21 +275,20 @@ void removeEspacos(char *nome) {
 	}
 }
 
-int imprimeAniversariante(){
-    FILE *arqEntrada;
+int imprimeAniversariante(char *nome, char *telefone, FILE *arqAgenda){
     int dia, mes, mesDigitado, mesEncontrado = 0;
-    char nome[20], telefone[20];
     
     
-    arqEntrada = fopen("Agenda.txt", "r");
-    if(arqEntrada == NULL){
+    arqAgenda = fopen("Agenda.txt", "r");
+    if(arqAgenda == NULL){
+        printf("\n      Erro ao abrir o arquivo!\n\n");
         return 1;//retorna 1 para arquivo não existe
     }
 
     printf("Digite o mes: ");
     scanf("%d", &mesDigitado);
 
-    while(fscanf(arqEntrada, "%s %s %d %d", nome, telefone, &dia, &mes) != EOF){
+    while(fscanf(arqAgenda, "%s %s %d %d", nome, telefone, &dia, &mes) != EOF){
 
         if(mes == mesDigitado ){
             printf("\n  %s %s %d %d\n", nome, telefone, dia, mes);
@@ -299,22 +301,21 @@ int imprimeAniversariante(){
         printf("\n  Nao ha nenhum contato que faz aniversario no mes %d!\n", mesDigitado);
     }
 
-    rewind(arqEntrada);
-    fclose(arqEntrada);
+    rewind(arqAgenda);
+    fclose(arqAgenda);
     return 0;
 }
 
 //retorna 0 - se arquivo cheio
 //retorna 1 - se arquivo vazio
-int verificaArquivoVazio(FILE *arquivo){
+int verificaArquivoVazio(char *nome, char *telefone, FILE *arqAgenda){
     int dia, mes;
-    char nome[20], telefone[20];
 
-    while (fscanf(arquivo, "%s %s %d %d", nome, telefone, &dia, &mes) != EOF){
+    while (fscanf(arqAgenda, "%s %s %d %d", nome, telefone, &dia, &mes) != EOF){
         return 0;
     }
 
-    fclose(arquivo);
+    fclose(arqAgenda);
     remove("Agenda.txt");
     return 1;
 }
