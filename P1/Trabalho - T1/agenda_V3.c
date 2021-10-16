@@ -70,8 +70,6 @@ int main(){
             verificarAgenda = imprimeArquivo(contato, telefone, "Agenda.txt", arqAgenda);
             if(verificarAgenda == 1){
                 printf("\n  Agenda ainda nao existe, adicione um contato para poder lista-los!\n\n");
-            }else if(verificarAgenda == 2){
-                printf("\n  Agenda Vazia! Adicione ao menos 1 contato para poder lista-los!\n\n");
             }
             printf("\n-------------------------\n");
 
@@ -187,21 +185,11 @@ int remover_contato(char *nome, char *telefone, char *contato, char *nome_minusc
 
     remove("Agenda.txt");
     rename("Agenda2.txt","Agenda.txt");
-
-    arqAgenda = fopen("Agenda.txt", "r");
-    if(arqAgenda == NULL){
-        printf("\n      Erro ao abrir o arquivo!\n\n");
-        return 1;//retorna 1 para arquivo não existe
-    }
     
     //retorna 1 pra vazio e 0 para cheio
-    if(verificaArquivoVazio(nome, telefone, arqAgenda) == 0){
-      fclose(arqAgenda);
-   }else{
-       return 3;
-   }
-
-    
+    if(verificaArquivoVazio(nome, telefone, arqAgenda) == 1){
+       return 3;  
+    }
 
     if(quantidade_removida != 0){
         return 0;
@@ -308,10 +296,19 @@ int imprimeAniversariante(char *nome, char *telefone, FILE *arqAgenda){
 
 //retorna 0 - se arquivo cheio
 //retorna 1 - se arquivo vazio
+//retorna 2 - se o arquivo não existe
+//se arquivo vazio, deleta o mesmo
 int verificaArquivoVazio(char *nome, char *telefone, FILE *arqAgenda){
     int dia, mes;
 
+    arqAgenda = fopen("Agenda.txt", "r");
+    if(arqAgenda == NULL){
+        printf("\n      Erro ao abrir o arquivo!\n\n");
+        return 2;//retorna 2 para arquivo não existe
+    }
+
     while (fscanf(arqAgenda, "%s %s %d %d", nome, telefone, &dia, &mes) != EOF){
+        fclose(arqAgenda);
         return 0;
     }
 
