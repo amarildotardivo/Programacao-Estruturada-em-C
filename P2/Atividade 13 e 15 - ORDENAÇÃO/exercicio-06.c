@@ -1,6 +1,8 @@
+//6) INSERTIONSORT
 #include <stdio.h>
+#include <time.h>
 
-#define tam 4
+#define tam 20
 
 void preenche(int *vet);
 void ordena(int *vet);
@@ -9,8 +11,10 @@ void imprimi(int *vet);
 int main(){
     int vet[tam];
     
+    srand(time(NULL));
+
     preenche(vet);
-    printf("\nVetor não ordenado:\n");
+    printf("\nVetor nao ordenado:\n");
     imprimi(vet);
 
     ordena(vet);
@@ -24,8 +28,7 @@ void preenche(int *vet){
     int i;
 
     for(i = 0; i < tam; i++){
-        printf("\nInsira o numero %d: ", i + 1);
-        scanf("%d", &vet[i]);
+        vet[i] = rand() % 30 + 1;
     }
 
 }
