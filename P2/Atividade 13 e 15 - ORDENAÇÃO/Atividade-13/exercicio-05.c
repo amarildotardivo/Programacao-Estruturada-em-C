@@ -14,7 +14,7 @@ int main(){
     printf("\nVetor nao ordenado:\n");
     imprimi(vet);
 
-    ordena(vet);
+    insertionSort(vet);
     printf("\nVetor ordenado:\n");
     imprimi(vet);
 
@@ -30,7 +30,7 @@ void preenche(int *vet){
     }
 
 }
-void ordena(int *vet){
+void insertionSort(int *vet){
     int i, j, valor;
 
     for(i = 1; i < tam; i++){
